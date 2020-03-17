@@ -1,10 +1,14 @@
-from flask import Flask, render_template, url_for, request, redirect
+from flask import Flask, render_template, url_for, request, redirect, jsonify
+from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
+import json
 
 app = Flask(__name__)
+app.config.from_object(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
 db = SQLAlchemy(app)
+CORS(app, resources={r'/*': {'origins': '*'}})
 
 class Todo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -27,7 +31,16 @@ def index():
             return 'There was an issues adding your task'
     else:
         tasks = Todo.query.order_by(Todo.date_created).all()
-        return render_template('index.html', tasks=tasks)
+        return jsonify({
+            'status': 'success',
+            'tasks': ['Take out the garbage', 'Meal prep']
+            #TODO: make this read from db
+            #'tasks': tasks,
+        })
+
+@app.route('/ping', methods=['GET'])
+def ping_pong():
+    return jsonify('pong!')
 
 @app.route('/delete/<int:id>')
 def delete(id):
