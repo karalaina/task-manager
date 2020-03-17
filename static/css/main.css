@@ -2,3 +2,18 @@ body {
     margin: 0;
     font-family: sans-serif;
 }
+.content {
+   text-align: center;
+}
+table {
+    margin: auto;
+}
+table, th, td {
+    border: 1px solid grey;
+}
+th, td {
+    padding: 5px;
+}
+form {
+    margin-top: 12px;
+}
